@@ -30,3 +30,10 @@ Sample output:
 }
 ```
 
+## Explore progress
+
+1. After some reading of the official api document, found createSourceFile is the ideal api to build the AST.
+2. After the AST is built, inspect the structure of the AST, define the target type defined path.
+3. Debug and Analyze the AST structure![Debug and Analyze the AST structure](public/assets/AST.png)
+
+
