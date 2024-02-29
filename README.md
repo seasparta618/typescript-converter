@@ -35,5 +35,7 @@ Sample output:
 1. After some reading of the official api document, found createSourceFile is the ideal api to build the AST.
 2. After the AST is built, inspect the structure of the AST, define the target type defined path.
 3. Debug and Analyze the AST structure![Debug and Analyze the AST structure](public/assets/AST.png)
+4. Using the [AST viewer tool](https://ts-ast-viewer.com/), analyze the AST structure.
+5. After analyze the AST structure, found button is an Alias Declaration, and can use isTypeAliasDeclaration, isLiteralType, isPropertySignature and isUnionTypeNode api.![Analyze the AST structure](public/assets/ast-viewer-analysis.png)
 
 
