@@ -1,17 +1,24 @@
 import * as ts from "typescript";
 
 const visit = (node: ts.Node, sourceFile: ts.SourceFile): any => {
-    if (ts.isTypeLiteralNode(node)){
+    if (ts.isTypeLiteralNode(node)) {
         const properties: Record<string, any> = {};
         node.members.forEach(member => {
-            if(ts.isPropertySignature(member)){
+            if (ts.isPropertySignature(member) && member.type) {
                 const key = member.name.getFullText(sourceFile).trim();
-                properties[key] = visit(member, sourceFile);
+                properties[key] = visit(member.type, sourceFile);
             }
         })
         return properties;
+    } else if (ts.isUnionTypeNode(node)) {
+        return node.types.map(type => {
+            if (ts.isLiteralTypeNode(type) && type.literal) {
+                return type.literal.getText(sourceFile);
+            }
+            return 'unknow';
+        })
     }
-    return '';
+    return 'unknown';
 }
 
 
@@ -27,7 +34,7 @@ const convertToObject = (type: string): any => {
     let result: any = {};
     ts.forEachChild(sourceFile, node => {
         // type Button = {} is a typeAliasDeclaration
-        if(ts.isTypeAliasDeclaration(node)){
+        if (ts.isTypeAliasDeclaration(node)) {
             const typeName = node.name.getFullText(sourceFile).trim();
             result[typeName] = visit(node.type, sourceFile);
         }
