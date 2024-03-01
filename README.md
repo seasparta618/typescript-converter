@@ -12,7 +12,7 @@ This project is a TypeScript compiler that converts TypeScript type definitions 
 
 ## Sample input and output
 
-the sample input and output 
+the sample input and output
 Sample input:
 
 ```typescript
@@ -21,7 +21,9 @@ const typeStr = `type Button = {
 };`;
 console.log(convertToObject(typeStr));
 ```
+
 Sample output:
+
 ```typescript
 {
   Button: {
@@ -38,5 +40,3 @@ Sample output:
 4. Using the [AST viewer tool](https://ts-ast-viewer.com/), analyze the AST structure.
 5. After analyze the AST structure, found button is an Alias Declaration, and can use isTypeAliasDeclaration, isLiteralType, isPropertySignature and isUnionTypeNode api.![Analyze the AST structure](public/assets/ast-viewer-analysis.png)
 6. start writing code, the visit function can be a recursive function, it will visit() until the end of the first type definition, for example, it will recursively visit until solid first, then visit test, then outlined ![recursive stack](public/assets/recursive-analysis.png)
-
-
