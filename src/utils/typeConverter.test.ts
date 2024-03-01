@@ -1,6 +1,6 @@
 import { convertToObject } from './typeConverter';
 
-describe('convertToObject', () => {
+describe('convertToObject type test', () => {
   describe('basic type test', () => {
     it('should convert a simple type', () => {
       const typeStr = `type Simple = {
@@ -51,21 +51,21 @@ describe('convertToObject', () => {
     });
 
     it('should handle number type', () => {
-        const typeStr = `type NumberType = {
+      const typeStr = `type NumberType = {
         num: number;
       };`;
-        const expected = {
-          NumberType: {
-            num: 'number',
-          },
-        };
-        expect(convertToObject(typeStr)).toEqual(expected);
-      });
+      const expected = {
+        NumberType: {
+          num: 'number',
+        },
+      };
+      expect(convertToObject(typeStr)).toEqual(expected);
+    });
   });
 
   describe('complex type test', () => {
     it('should convert for complex type test', () => {
-        const typeStr = `type Button = {
+      const typeStr = `type Button = {
             variant: "solid" | "text" | "outlined";
             disabled: boolean;
             size? : "small" | "medium" | "large";
@@ -75,15 +75,103 @@ describe('convertToObject', () => {
         };`;
       const expected = {
         Button: {
-          variant: [ 'solid', 'text', 'outlined' ],
+          variant: ['solid', 'text', 'outlined'],
           disabled: 'boolean',
-          'size?': [ 'small', 'medium', 'large' ],
-          role: [ 'button', 'input' ],
+          'size?': ['small', 'medium', 'large'],
+          role: ['button', 'input'],
           onClick: 'function',
-          classList: 'Array'
-        }
+          classList: 'Array',
+        },
       };
       expect(convertToObject(typeStr)).toEqual(expected);
+    });
+  });
+});
+
+describe('convertToObject interface test', () => {
+  describe('basic interface test', () => {
+    it('should convert a simple interface', () => {
+      const typeStr = `interface Simple {
+      flag: boolean;
+    };`;
+      const expected = {
+        Simple: {
+          flag: 'boolean',
+        },
+      };
+      expect(convertToObject(typeStr)).toEqual(expected);
+    });
+
+    it('should handle union types in interface', () => {
+      const typeStr = `interface Union {
+      variant: "a" | "b" | "c";
+    };`;
+      const expected = {
+        Union: {
+          variant: ['a', 'b', 'c'],
+        },
+      };
+      expect(convertToObject(typeStr)).toEqual(expected);
+    });
+
+    it('should handle optional properties', () => {
+      const typeStr = `interface Optional {
+      key?: string;
+    };`;
+      const expected = {
+        Optional: {
+          'key?': 'string',
+        },
+      };
+      expect(convertToObject(typeStr)).toEqual(expected);
+    });
+
+    it('should handle array types in interface', () => {
+      const typeStr = `interface ArrayType {
+      list: number[];
+    };`;
+      const expected = {
+        ArrayType: {
+          list: 'Array',
+        },
+      };
+      expect(convertToObject(typeStr)).toEqual(expected);
+    });
+
+    it('should handle number type in interface', () => {
+      const typeStr = `interface NumberType {
+        num: number;
+      };`;
+      const expected = {
+        NumberType: {
+          num: 'number',
+        },
+      };
+      expect(convertToObject(typeStr)).toEqual(expected);
+    });
+  });
+
+  describe('complex interface test', () => {
+    it('should convert for complex interface test', () => {
+      const buttonInterfaceStr = `interface Button {
+            variant: "solid" | "text" | "outlined";
+            disabled: boolean;
+            size? : "small" | "medium" | "large";
+            role: ["button" , "input"];
+            onClick: () => void;
+            classList: string[];
+        };`;
+      const expected = {
+        Button: {
+          variant: ['solid', 'text', 'outlined'],
+          disabled: 'boolean',
+          'size?': ['small', 'medium', 'large'],
+          role: ['button', 'input'],
+          onClick: 'function',
+          classList: 'Array',
+        },
+      };
+      expect(convertToObject(buttonInterfaceStr)).toEqual(expected);
     });
   });
 });

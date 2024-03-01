@@ -1,7 +1,7 @@
 import * as ts from 'typescript';
 
 const visit = (node: ts.Node, sourceFile: ts.SourceFile): any => {
-  if (ts.isTypeLiteralNode(node)) {
+  if (ts.isTypeLiteralNode(node) || ts.isInterfaceDeclaration(node)) {
     const properties: Record<string, any> = {};
     node.members.forEach((member) => {
       if (ts.isPropertySignature(member) && member.type) {
@@ -61,9 +61,10 @@ export const convertToObject = (type: string): any => {
   let result: any = {};
   ts.forEachChild(sourceFile, (node) => {
     // type Button = {} is a typeAliasDeclaration
-    if (ts.isTypeAliasDeclaration(node)) {
-      const typeName = node.name.getFullText(sourceFile).trim();
-      result[typeName] = visit(node.type, sourceFile);
+    if (ts.isTypeAliasDeclaration(node) || ts.isInterfaceDeclaration(node)) {
+      const typeName = node.name.getText(sourceFile).trim();
+      const typeMembers = ts.isTypeAliasDeclaration(node) ? node.type : node;
+      result[typeName] = visit(typeMembers, sourceFile);
     }
   });
   return result;
