@@ -1,4 +1,4 @@
-import { convertToObject } from './index';
+import { convertToObject } from './typeConverter';
 
 describe('convertToObject', () => {
   describe('basic type test', () => {
@@ -85,6 +85,5 @@ describe('convertToObject', () => {
       };
       expect(convertToObject(typeStr)).toEqual(expected);
     });
-
   });
 });
