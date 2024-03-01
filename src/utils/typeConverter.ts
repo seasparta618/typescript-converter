@@ -53,10 +53,10 @@ const visit = (node: ts.Node, sourceFile: ts.SourceFile): TypeObject | string | 
  * @returns {string} - The text of the literal type node.
  */
 const getLiteralType = (type: ts.TypeNode, sourceFile: ts.SourceFile): string => {
-    if (ts.isLiteralTypeNode(type)) {
-      return type.literal.getText(sourceFile).replace(/\"/g, '');
-    }
-    return 'unknown';
+  if (ts.isLiteralTypeNode(type)) {
+    return type.literal.getText(sourceFile).replace(/\"/g, '');
+  }
+  return 'unknown';
 };
 
 /**
