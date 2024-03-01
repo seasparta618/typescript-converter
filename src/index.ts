@@ -13,10 +13,12 @@ const visit = (node: ts.Node, sourceFile: ts.SourceFile): any => {
     } else if (ts.isUnionTypeNode(node)) {
         return node.types.map(type => {
             if (ts.isLiteralTypeNode(type) && type.literal) {
-                return type.literal.getText(sourceFile);
+                return type.literal.getText(sourceFile).replace(/\"/g, "");
             }
             return 'unknow';
         })
+    } else if (ts.isIntersectionTypeNode(node)) {
+
     }
     return 'unknown';
 }
