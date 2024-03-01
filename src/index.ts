@@ -5,7 +5,7 @@ const visit = (node: ts.Node, sourceFile: ts.SourceFile): any => {
         const properties: Record<string, any> = {};
         node.members.forEach(member => {
             if (ts.isPropertySignature(member) && member.type) {
-                const key = member.name.getFullText(sourceFile).trim();
+                const key = `${member.name.getFullText(sourceFile)}${member.questionToken ? '?' : ''}`.trim();
                 properties[key] = visit(member.type, sourceFile);
             }
         })
@@ -17,8 +17,6 @@ const visit = (node: ts.Node, sourceFile: ts.SourceFile): any => {
             }
             return 'unknow';
         })
-    } else if (ts.isIntersectionTypeNode(node)) {
-
     }
     return 'unknown';
 }
