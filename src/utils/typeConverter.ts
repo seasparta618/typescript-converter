@@ -26,20 +26,10 @@ const visit = (node: ts.Node, sourceFile: ts.SourceFile): TypeObject | string | 
     return properties;
   } else if (ts.isUnionTypeNode(node)) {
     // check the union type
-    return node.types.map((type) => {
-      if (ts.isLiteralTypeNode(type) && type.literal) {
-        return type.literal.getText(sourceFile).replace(/\"/g, '');
-      }
-      return 'unknown';
-    });
+    return node.types.map(type => getLiteralType(type, sourceFile));
   } else if (ts.isTupleTypeNode(node)) {
     // check the tuple type
-    return node.elements.map((element) => {
-      if (ts.isLiteralTypeNode(element) && element.literal) {
-        return element.literal.getText(sourceFile).replace(/\"/g, '');
-      }
-      return 'unknow';
-    });
+    return node.elements.map(element => getLiteralType(element, sourceFile));
   } else if (ts.isArrayTypeNode(node)) {
     return 'Array';
   } else if (ts.isFunctionTypeNode(node)) {
@@ -53,6 +43,20 @@ const visit = (node: ts.Node, sourceFile: ts.SourceFile): TypeObject | string | 
   }
   // Default case for those unhandled types
   return 'unknown';
+};
+
+/**
+ * Extracts the text of a literal type node.
+ * 
+ * @param {ts.LiteralTypeNode} type - The literal type node.
+ * @param {ts.SourceFile} sourceFile - The source file containing the node.
+ * @returns {string} - The text of the literal type node.
+ */
+const getLiteralType = (type: ts.TypeNode, sourceFile: ts.SourceFile): string => {
+    if (ts.isLiteralTypeNode(type)) {
+      return type.literal.getText(sourceFile).replace(/\"/g, '');
+    }
+    return 'unknown';
 };
 
 /**
