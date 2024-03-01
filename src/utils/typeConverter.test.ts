@@ -16,11 +16,11 @@ describe('convertToObject type test', () => {
 
     it('should handle union types', () => {
       const typeStr = `type Union = {
-      variant: "a" | "b" | "c";
+      variant: "a" | 100 | false;
     };`;
       const expected = {
         Union: {
-          variant: ['a', 'b', 'c'],
+          variant: ['a', 100, false],
         },
       };
       expect(convertToObject(typeStr)).toEqual(expected);
@@ -70,6 +70,7 @@ describe('convertToObject type test', () => {
             disabled: boolean;
             size? : "small" | "medium" | "large";
             role: ["button" , "input"];
+            result: true | 1;
             onClick: () => void;
             classList: string[];
         };`;
@@ -79,6 +80,7 @@ describe('convertToObject type test', () => {
           disabled: 'boolean',
           'size?': ['small', 'medium', 'large'],
           role: ['button', 'input'],
+          result: [true, 1],
           onClick: 'function',
           classList: 'Array',
         },
@@ -104,11 +106,11 @@ describe('convertToObject interface test', () => {
 
     it('should handle union types in interface', () => {
       const typeStr = `interface Union {
-      variant: "a" | "b" | "c";
-    };`;
+        variant: "a" | 100 | false;
+      };`;
       const expected = {
         Union: {
-          variant: ['a', 'b', 'c'],
+          variant: ['a', 100, false],
         },
       };
       expect(convertToObject(typeStr)).toEqual(expected);
@@ -158,6 +160,7 @@ describe('convertToObject interface test', () => {
             disabled: boolean;
             size? : "small" | "medium" | "large";
             role: ["button" , "input"];
+            result: true | 1
             onClick: () => void;
             classList: string[];
         };`;
@@ -167,6 +170,7 @@ describe('convertToObject interface test', () => {
           disabled: 'boolean',
           'size?': ['small', 'medium', 'large'],
           role: ['button', 'input'],
+          result: [true, 1],
           onClick: 'function',
           classList: 'Array',
         },
