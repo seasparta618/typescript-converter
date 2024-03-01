@@ -5,6 +5,7 @@ const visit = (node: ts.Node, sourceFile: ts.SourceFile): any => {
         const properties: Record<string, any> = {};
         node.members.forEach(member => {
             if (ts.isPropertySignature(member) && member.type) {
+                // detect if the attribute is optional
                 const key = `${member.name.getFullText(sourceFile)}${member.questionToken ? '?' : ''}`.trim();
                 properties[key] = visit(member.type, sourceFile);
             }
@@ -17,6 +18,17 @@ const visit = (node: ts.Node, sourceFile: ts.SourceFile): any => {
             }
             return 'unknow';
         })
+    } else if (ts.isTupleTypeNode(node)){
+        return node.elements.map(element => {
+            if (ts.isLiteralTypeNode(element) && element.literal) {
+                return element.literal.getText(sourceFile).replace(/\"/g, "");
+            }
+            return 'unknow';
+        })
+    } else if (ts.isArrayTypeNode(node)){
+        return 'array'
+    } else if (ts.isFunctionTypeNode(node)){
+        return 'function'
     }
     return 'unknown';
 }
@@ -47,6 +59,8 @@ const typeStr = `type Button = {
     disabled: boolean;
     size? : "small" | "medium" | "large";
     role: ["button" , "input"];
+    onClick: () => void;
+    classList: string[];
 };`
 
 console.log(convertToObject(typeStr));
