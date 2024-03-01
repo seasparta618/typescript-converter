@@ -11,7 +11,7 @@ type TypeObject = {
  * @param {ts.SourceFile} sourceFile - The source file containing the node.
  * @returns {any} - The JavaScript object representation of the node.
  */
-const visit = (node: ts.Node, sourceFile: ts.SourceFile): TypeObject | string | string[] => {
+const visit = (node: ts.Node, sourceFile: ts.SourceFile): TypeObject | string | string[] | number | number[] | (string | number)[] => {
   // Handle type literals and interface declarations
   if (ts.isTypeLiteralNode(node) || ts.isInterfaceDeclaration(node)) {
     const properties: Record<string, any> = {};
@@ -52,9 +52,15 @@ const visit = (node: ts.Node, sourceFile: ts.SourceFile): TypeObject | string | 
  * @param {ts.SourceFile} sourceFile - The source file containing the node.
  * @returns {string} - The text of the literal type node.
  */
-const getLiteralType = (type: ts.TypeNode, sourceFile: ts.SourceFile): string => {
+const getLiteralType = (type: ts.TypeNode, sourceFile: ts.SourceFile): string | number => {
   if (ts.isLiteralTypeNode(type)) {
-    return type.literal.getText(sourceFile).replace(/\"/g, '');
+    const text = type.literal.getText(sourceFile);
+    // Check if the literal is a number
+    if (type.literal.kind === ts.SyntaxKind.NumericLiteral) {
+      return parseFloat(text);
+    }
+    // Otherwise, treat it as a string and remove quotes
+    return text.replace(/\"/g, '');
   }
   return 'unknown';
 };
@@ -85,3 +91,16 @@ export const convertToObject = (type: string): TypeObject => {
   });
   return result;
 };
+
+
+const typeStr = `type Button = {
+  variant: "solid" | "text" | "outlined";
+  array: number[];
+  size?: "small" | "large";
+  tupleType: [1, 2, 3];
+  disabled: boolean;
+  onClick: () => void;
+  num: 200 | 300;
+};`;
+
+console.log(convertToObject(typeStr));
