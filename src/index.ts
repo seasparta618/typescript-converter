@@ -12,22 +12,24 @@ const visit = (node: ts.Node, sourceFile: ts.SourceFile): any => {
         })
         return properties;
     } else if (ts.isUnionTypeNode(node)) {
+        // check the union type
         return node.types.map(type => {
             if (ts.isLiteralTypeNode(type) && type.literal) {
                 return type.literal.getText(sourceFile).replace(/\"/g, "");
             }
-            return 'unknow';
+            return 'unknown';
         })
-    } else if (ts.isTupleTypeNode(node)){
+    } else if (ts.isTupleTypeNode(node)) {
+        // check the tuple type
         return node.elements.map(element => {
             if (ts.isLiteralTypeNode(element) && element.literal) {
                 return element.literal.getText(sourceFile).replace(/\"/g, "");
             }
             return 'unknow';
         })
-    } else if (ts.isArrayTypeNode(node)){
-        return 'array'
-    } else if (ts.isFunctionTypeNode(node)){
+    } else if (ts.isArrayTypeNode(node)) {
+        return 'Array'
+    } else if (ts.isFunctionTypeNode(node)) {
         return 'function'
     }
     return 'unknown';
