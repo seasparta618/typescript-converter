@@ -1,6 +1,18 @@
 import * as ts from 'typescript';
 
-const visit = (node: ts.Node, sourceFile: ts.SourceFile): any => {
+type TypeObject = {
+  [key: string]: string | string[] | TypeObject | TypeObject[];
+};
+
+/**
+ * Visits a TypeScript AST node and converts it to a JavaScript object representation.
+ * 
+ * @param {ts.Node} node - The TypeScript AST node to visit.
+ * @param {ts.SourceFile} sourceFile - The source file containing the node.
+ * @returns {any} - The JavaScript object representation of the node.
+ */
+const visit = (node: ts.Node, sourceFile: ts.SourceFile): TypeObject | string | string[] => {
+  // Handle type literals and interface declarations
   if (ts.isTypeLiteralNode(node) || ts.isInterfaceDeclaration(node)) {
     const properties: Record<string, any> = {};
     node.members.forEach((member) => {
@@ -28,13 +40,6 @@ const visit = (node: ts.Node, sourceFile: ts.SourceFile): any => {
       }
       return 'unknow';
     });
-  } else if (ts.isIntersectionTypeNode(node)) {
-    const mergedTypes: Record<string, any> = {};
-    node.types.forEach((type) => {
-      const typeObject = visit(type, sourceFile);
-      Object.assign(mergedTypes, typeObject);
-    });
-    return mergedTypes;
   } else if (ts.isArrayTypeNode(node)) {
     return 'Array';
   } else if (ts.isFunctionTypeNode(node)) {
@@ -46,10 +51,17 @@ const visit = (node: ts.Node, sourceFile: ts.SourceFile): any => {
   } else if (node.kind === ts.SyntaxKind.NumberKeyword) {
     return 'number';
   }
+  // Default case for those unhandled types
   return 'unknown';
 };
 
-export const convertToObject = (type: string): any => {
+/**
+ * Converts a TypeScript type string to a JavaScript object representation.
+ * 
+ * @param {string} type - The TypeScript type string to convert.
+ * @returns {any} - The JavaScript object representation of the type.
+ */
+export const convertToObject = (type: string): TypeObject => {
   // create the AST structure of the input string
   const sourceFile = ts.createSourceFile(
     'temp.ts',
@@ -60,7 +72,7 @@ export const convertToObject = (type: string): any => {
   );
   let result: any = {};
   ts.forEachChild(sourceFile, (node) => {
-    // type Button = {} is a typeAliasDeclaration
+    // Handle type alias and interface declarations
     if (ts.isTypeAliasDeclaration(node) || ts.isInterfaceDeclaration(node)) {
       const typeName = node.name.getText(sourceFile).trim();
       const typeMembers = ts.isTypeAliasDeclaration(node) ? node.type : node;
