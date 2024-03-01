@@ -39,6 +39,7 @@ const typeStr = `type Button = {
     variant: "solid" | "text" | "outlined";
     disabled: boolean;
     size? : "small" | "medium" | "large";
-    role: ["button" , "`
+    role: ["button" , "input"];
+};`
 
 console.log(convertToObject(typeStr));
