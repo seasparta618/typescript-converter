@@ -68,14 +68,3 @@ export const convertToObject = (type: string): any => {
   });
   return result;
 };
-
-const typeStr = `type Button = {
-    variant: "solid" | "text" | "outlined";
-    disabled: boolean;
-    size? : "small" | "medium" | "large";
-    role: ["button" , "input"];
-    onClick: () => void;
-    classList: string[];
-};`;
-
-console.log(convertToObject(typeStr));

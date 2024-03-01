@@ -49,5 +49,42 @@ describe('convertToObject', () => {
       };
       expect(convertToObject(typeStr)).toEqual(expected);
     });
+
+    it('should handle number type', () => {
+        const typeStr = `type NumberType = {
+        num: number;
+      };`;
+        const expected = {
+          NumberType: {
+            num: 'number',
+          },
+        };
+        expect(convertToObject(typeStr)).toEqual(expected);
+      });
+  });
+
+  describe('complex type test', () => {
+    it('should convert for complex type test', () => {
+        const typeStr = `type Button = {
+            variant: "solid" | "text" | "outlined";
+            disabled: boolean;
+            size? : "small" | "medium" | "large";
+            role: ["button" , "input"];
+            onClick: () => void;
+            classList: string[];
+        };`;
+      const expected = {
+        Button: {
+          variant: [ 'solid', 'text', 'outlined' ],
+          disabled: 'boolean',
+          'size?': [ 'small', 'medium', 'large' ],
+          role: [ 'button', 'input' ],
+          onClick: 'function',
+          classList: 'Array'
+        }
+      };
+      expect(convertToObject(typeStr)).toEqual(expected);
+    });
+
   });
 });
