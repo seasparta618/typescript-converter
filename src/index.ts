@@ -27,7 +27,7 @@ const visit = (node: ts.Node, sourceFile: ts.SourceFile): any => {
             }
             return 'unknow';
         })
-    } else if(ts.isIntersectionTypeNode(node)){
+    } else if (ts.isIntersectionTypeNode(node)) {
         const mergedTypes: Record<string, any> = {};
         node.types.forEach(type => {
             const typeObject = visit(type, sourceFile);
@@ -38,14 +38,18 @@ const visit = (node: ts.Node, sourceFile: ts.SourceFile): any => {
         return 'Array';
     } else if (ts.isFunctionTypeNode(node)) {
         return 'function';
-    } else if (node.kind === ts.SyntaxKind.BooleanKeyword){
+    } else if (node.kind === ts.SyntaxKind.BooleanKeyword) {
         return 'boolean';
+    } else if (node.kind === ts.SyntaxKind.StringKeyword){
+        return 'string';
+    } else if (node.kind === ts.SyntaxKind.NumberKeyword){
+        return 'number';
     }
     return 'unknown';
 }
 
 
-const convertToObject = (type: string): any => {
+export const convertToObject = (type: string): any => {
     // create the AST structure of the input string
     const sourceFile = ts.createSourceFile(
         "temp.ts",
