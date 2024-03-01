@@ -27,10 +27,19 @@ const visit = (node: ts.Node, sourceFile: ts.SourceFile): any => {
             }
             return 'unknow';
         })
+    } else if(ts.isIntersectionTypeNode(node)){
+        const mergedTypes: Record<string, any> = {};
+        node.types.forEach(type => {
+            const typeObject = visit(type, sourceFile);
+            Object.assign(mergedTypes, typeObject);
+        });
+        return mergedTypes;
     } else if (ts.isArrayTypeNode(node)) {
-        return 'Array'
+        return 'Array';
     } else if (ts.isFunctionTypeNode(node)) {
-        return 'function'
+        return 'function';
+    } else if (node.kind === ts.SyntaxKind.BooleanKeyword){
+        return 'boolean';
     }
     return 'unknown';
 }
