@@ -25,28 +25,30 @@ npx ts-node src/index.ts --input-file path/to/input-file [--output-file path/to/
 
 ### Example:
 
-To convert a TypeScript file and print the result to the console:
+To convert a file and print the result to the console:
 
 ```bash
-npx ts-node src/index.ts --input-file src/types.ts
+npx ts-node src/index.ts --input-file your-input-file-path
 ```
 
-To convert a TypeScript file and save the result to a file:
+To convert a file and save the result to a file:
 
 ```bash
 npx ts-node src/index.ts --input-file your-input-file-path --output-file your-output-file-path
 ```
 
+<!-- sample-input-anchor -->
+
 ### Using sample input
 
-If you do not want to some input, you can use the sample inputs inside `public/resources` directory
+If you do not want to define some input, you can use the sample inputs inside `public/resources` directory
 If you want to see the result in console, you can run:
 
 ```bash
 npx ts-node src/index.ts -- --input-file public/resources/sample-interface-input.txt
 ```
 
-you should be able to see the belowing outout in your console
+you should be able to see the following output in your console
 
 ```bash
 Converted object: {
@@ -82,7 +84,7 @@ If you want to use compiled javascript file to run the application, you can run
 npx tsc
 ```
 
-You should be able to see `compiled/index.js`
+You should be able to see `compiled/index.js` added under the project root directory
 
 Then using nodejs, run command in terminal
 
@@ -90,7 +92,7 @@ Then using nodejs, run command in terminal
 node compiled/index.js --input-file path/to/input-file.ts [--output-file path/to/output-file.json]
 ```
 
-Please refer to the above manual in `How to run application using npx ts-node` if you want to use sample input provided.
+Please refer to the [sample input section](#sample-input-anchor) if you want to use the sample input provided using node.
 
 ## Notes
 
