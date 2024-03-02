@@ -3,6 +3,7 @@
 ## Overview
 
 This project is a TypeScript compiler that converts TypeScript type definitions into JavaScript object literals using standard Typescript compiler api. It started with the `createSourceFile` API from the TypeScript Compiler API and involved debugging to observe the structure of a standardized `typeStr` input.
+In order to avoid some EOF or line break issue, this application accepts file input, no console input is accepted.
 
 ## Prerequisites
 
