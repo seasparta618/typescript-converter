@@ -1,0 +1,6 @@
+interface Button {
+    variant: "solid" | "te;
+    array: string[];
+    size?: "small" | "large";
+    onClick: () => vo;
+    disabled: boan;`

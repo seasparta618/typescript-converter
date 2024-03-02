@@ -1,0 +1,7 @@
+interface Button {
+    variant: "solid" | "text";
+    array: string[];
+    size?: "small" | "large";
+    onClick: () => void;
+    disabled: boolean;
+}
