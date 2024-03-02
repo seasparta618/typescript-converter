@@ -184,7 +184,7 @@ describe('parse invalid input test', () => {
   let consoleSpy: jest.SpyInstance;
 
   beforeEach(() => {
-    consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => { });
+    consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
   });
 
   afterEach(() => {
@@ -213,4 +213,4 @@ describe('parse invalid input test', () => {
     expect(consoleSpy.mock.calls[0][0]).toContain('Syntax error in input');
     expect(result).toBe(null);
   });
-})
+});

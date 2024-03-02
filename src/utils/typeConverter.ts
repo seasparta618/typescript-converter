@@ -129,8 +129,9 @@ const checkSyntax = (sourceFile: ts.SourceFile): boolean => {
     options: {},
     // the min set to implement host interface
     host: {
-      getSourceFile: (fileName) => (fileName === sourceFile.fileName ? sourceFile : undefined),
-      writeFile: () => { },
+      getSourceFile: (fileName) =>
+        fileName === sourceFile.fileName ? sourceFile : undefined,
+      writeFile: () => {},
       // Default library file.
       getDefaultLibFileName: () => 'lib.d.ts',
       useCaseSensitiveFileNames: () => true,
@@ -143,17 +144,20 @@ const checkSyntax = (sourceFile: ts.SourceFile): boolean => {
       readFile: () => '',
     },
   });
-  
+
   // Get the syntactic diagnostics (syntax errors) for the source file.
   const diagnostics = program.getSyntacticDiagnostics(sourceFile);
 
   if (diagnostics.length > 0) {
     diagnostics.forEach((diagnostic) => {
-      const message = ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n');
+      const message = ts.flattenDiagnosticMessageText(
+        diagnostic.messageText,
+        '\n'
+      );
       console.error(`Syntax error in input: ${message}`);
     });
     return false;
   }
 
   return true;
-}
+};
