@@ -106,27 +106,6 @@ Please refer to the [sample input section](#using-sample-input) if you want to u
 - Utilizes the TypeScript Compiler API for parsing and analyzing TypeScript code.
 - Supports various TypeScript types, including union types.
 
-## Sample input and output
-
-the sample input and output
-Sample input:
-
-```typescript
-const typeStr = `type Button = {
-    variant: "solid" | "text" | "outlined";
-};`;
-console.log(convertToObject(typeStr));
-```
-
-Sample output:
-
-```typescript
-{
-  Button: {
-    variant: [ 'solid', 'text', 'outlined' ],
-  }
-}
-```
 
 ## Explore progress
 
