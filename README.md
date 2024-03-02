@@ -37,8 +37,6 @@ To convert a file and save the result to a file:
 npx ts-node src/index.ts --input-file your-input-file-path --output-file your-output-file-path
 ```
 
-<!-- sample-input-anchor -->
-
 ### Using sample input
 
 If you do not want to define some input, you can use the sample inputs inside `public/resources` directory
@@ -86,13 +84,15 @@ npx tsc
 
 You should be able to see `compiled/index.js` added under the project root directory
 
-Then using nodejs, run command in terminal
+Then using nodejs, run command in console.
+
+**Please note: directly using node does not need to use `--` before input-file**
 
 ```bash
 node compiled/index.js --input-file path/to/input-file.ts [--output-file path/to/output-file.json]
 ```
 
-Please refer to the [sample input section](#sample-input-anchor) if you want to use the sample input provided using node.
+Please refer to the [sample input section](#using-sample-input) if you want to use the sample input provided using node.
 
 ## Notes
 
