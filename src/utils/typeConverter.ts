@@ -91,7 +91,7 @@ const getLiteralType = (
  * @param {string} type - The TypeScript type string to convert.
  * @returns {any} - The JavaScript object representation of the type.
  */
-export const convertToObject = (type: string): TypeObject => {
+export const convertToObject = (type: string): TypeObject | null => {
   // create the AST structure of the input string
   const sourceFile = ts.createSourceFile(
     'temp.ts',
@@ -100,6 +100,11 @@ export const convertToObject = (type: string): TypeObject => {
     false,
     ts.ScriptKind.TS
   );
+
+  if (!checkSyntax(sourceFile)) {
+    console.error('Syntax error in input. Conversion aborted.');
+    return null;
+  }
   let result: any = {};
   ts.forEachChild(sourceFile, (node) => {
     // Handle type alias and interface declarations
@@ -111,3 +116,44 @@ export const convertToObject = (type: string): TypeObject => {
   });
   return result;
 };
+
+/**
+ * Check if the parsed tyescript source file can construct a valid AST
+ * This function accepts a parsed ts source file, and will return if it is a valid AST or not
+ *
+ * @param {ts.SourceFile} type - The parsed typescript source file
+ */
+const checkSyntax = (sourceFile: ts.SourceFile): boolean => {
+  const program = ts.createProgram({
+    rootNames: [sourceFile.fileName],
+    options: {},
+    // the min set to implement host interface
+    host: {
+      getSourceFile: (fileName) => (fileName === sourceFile.fileName ? sourceFile : undefined),
+      writeFile: () => { },
+      // Default library file.
+      getDefaultLibFileName: () => 'lib.d.ts',
+      useCaseSensitiveFileNames: () => true,
+      getCanonicalFileName: (fileName) => fileName,
+      // minimum implementation
+      getCurrentDirectory: () => '',
+      getNewLine: () => '\n',
+      fileExists: (fileName) => fileName === sourceFile.fileName,
+      // minimum implementation
+      readFile: () => '',
+    },
+  });
+  
+  // Get the syntactic diagnostics (syntax errors) for the source file.
+  const diagnostics = program.getSyntacticDiagnostics(sourceFile);
+
+  if (diagnostics.length > 0) {
+    diagnostics.forEach((diagnostic) => {
+      const message = ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n');
+      console.error(`Syntax error in input: ${message}`);
+    });
+    return false;
+  }
+
+  return true;
+}

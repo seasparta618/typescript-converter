@@ -179,3 +179,38 @@ describe('convertToObject interface test', () => {
     });
   });
 });
+
+describe('parse invalid input test', () => {
+  let consoleSpy: jest.SpyInstance;
+
+  beforeEach(() => {
+    consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => { });
+  });
+
+  afterEach(() => {
+    consoleSpy.mockRestore();
+  });
+
+  it('should return null for incomplete interface define', () => {
+    // invalid interface input, should have ']', should have the close of curly braces
+    const buttonInterfaceStr = `interface Button {
+          variant: "solid" | "text" | "outlined";
+          disabled: boolean;
+          size? : "small" | "medium" | "large";
+          role: ["button" ;`;
+    const result = convertToObject(buttonInterfaceStr);
+    expect(consoleSpy).toHaveBeenCalled();
+    expect(consoleSpy.mock.calls[0][0]).toContain('Syntax error in input');
+    expect(result).toBe(null);
+  });
+
+  it('should return null for incomplete type define', () => {
+    // invalid interface input, should have the close of curly braces
+    const buttonInterfaceStr = `type Button = {
+          variant: "solid" | "te`;
+    const result = convertToObject(buttonInterfaceStr);
+    expect(consoleSpy).toHaveBeenCalled();
+    expect(consoleSpy.mock.calls[0][0]).toContain('Syntax error in input');
+    expect(result).toBe(null);
+  });
+})
